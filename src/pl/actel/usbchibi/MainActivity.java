@@ -31,9 +31,9 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	 * {@link android.support.v13.app.FragmentStatePagerAdapter}.
 	 */
 	SectionsPagerAdapter mSectionsPagerAdapter;
-	private BrightnessFragment brightness_fragment = BrightnessFragment.newInstance();
-	private SpeedFragment speed_fragment = SpeedFragment.newInstance();
-	private DirectionFragment direction_fragment = DirectionFragment.newInstance();
+	private BrightnessFragment brightness_fragment = new BrightnessFragment();
+	private SpeedFragment speed_fragment = new SpeedFragment();
+	private DirectionFragment direction_fragment = new DirectionFragment();
 
 	/**
 	 * The {@link ViewPager} that will host the section contents.
@@ -175,14 +175,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		private SeekBar brightness_bar;
 		Integer brightnessProgress = 0;
 
-		public static BrightnessFragment newInstance() {
-			BrightnessFragment fragment = new BrightnessFragment();
-			return fragment;
-		}
-
-		public BrightnessFragment() {
-		}
-
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
@@ -220,14 +212,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		private SeekBar speed_bar;
 		Integer speedProgress = 0;
 
-		public static SpeedFragment newInstance() {
-			SpeedFragment fragment = new SpeedFragment();
-			return fragment;
-		}
-
-		public SpeedFragment() {
-		}
-
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
@@ -264,14 +248,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		private RadioGroup direction_group;
 		private RadioButton direction_left;
 		private RadioButton direction_right;
-
-		public static DirectionFragment newInstance() {
-			DirectionFragment fragment = new DirectionFragment();
-			return fragment;
-		}
-
-		public DirectionFragment() {
-		}
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
