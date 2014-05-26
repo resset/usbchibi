@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.RadioGroup;
+import android.widget.RadioButton;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
 
@@ -169,6 +171,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	 */
 	public static class BrightnessFragment extends Fragment {
 
+		private TextView brightness_text;
+		private SeekBar brightness_bar;
+		Integer brightnessProgress = 0;
+
 		public static BrightnessFragment newInstance() {
 			BrightnessFragment fragment = new BrightnessFragment();
 			return fragment;
@@ -182,6 +188,25 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_brightness, container,
 					false);
+
+			brightness_text = (TextView) rootView.findViewById(R.id.textViewBrightnessCounter);
+
+			brightness_bar = (SeekBar) rootView.findViewById(R.id.seekBarBrightness);
+			brightness_bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+	            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+	                brightnessProgress = progress;
+	            }
+
+	            public void onStartTrackingTouch(SeekBar seekBar) {
+					// TODO Auto-generated method stub
+	            }
+
+	            public void onStopTrackingTouch(SeekBar seekBar) {
+	                brightness_text.setText(brightnessProgress.toString());
+	            }
+	        });
+
 			return rootView;
 		}
 	}
@@ -190,6 +215,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	 * Fragment containing a speed settings view.
 	 */
 	public static class SpeedFragment extends Fragment {
+
+		private TextView speed_text;
+		private SeekBar speed_bar;
+		Integer speedProgress = 0;
 
 		public static SpeedFragment newInstance() {
 			SpeedFragment fragment = new SpeedFragment();
@@ -204,6 +233,25 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_speed, container,
 					false);
+
+			speed_text = (TextView) rootView.findViewById(R.id.textViewSpeedCounter);
+
+			speed_bar = (SeekBar) rootView.findViewById(R.id.seekBarSpeed);
+			speed_bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+	            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+	                speedProgress = progress;
+	            }
+
+	            public void onStartTrackingTouch(SeekBar seekBar) {
+					// TODO Auto-generated method stub
+	            }
+
+	            public void onStopTrackingTouch(SeekBar seekBar) {
+	                speed_text.setText(speedProgress.toString());
+	            }
+	        });
+
 			return rootView;
 		}
 	}
@@ -212,6 +260,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	 * Fragment containing a direction settings view.
 	 */
 	public static class DirectionFragment extends Fragment {
+
+		private RadioGroup direction_group;
+		private RadioButton direction_left;
+		private RadioButton direction_right;
 
 		public static DirectionFragment newInstance() {
 			DirectionFragment fragment = new DirectionFragment();
@@ -226,6 +278,23 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_direction, container,
 					false);
+
+			direction_left = (RadioButton) rootView.findViewById(R.id.radioDirectionLeft);
+			direction_right = (RadioButton) rootView.findViewById(R.id.radioDirectionRight);
+
+			direction_group = (RadioGroup) rootView.findViewById(R.id.radioGroupDirection);
+			direction_group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+				@Override
+				public void onCheckedChanged(RadioGroup group, int checkedId) {
+					if (checkedId == direction_left.getId()) {
+						System.out.println("lewo");
+					} else {
+						System.out.println("prawo");
+					}
+				}
+			});
+
 			return rootView;
 		}
 	}

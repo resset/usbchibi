@@ -14,7 +14,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="42dp" />
+        android:layout_marginTop="42dp"
+        android:progress="0"
+        android:max="255" />
 
     <TextView
         android:id="@+id/textViewSpeedCounter"
