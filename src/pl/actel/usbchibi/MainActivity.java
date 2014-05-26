@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
@@ -28,6 +29,9 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	 * {@link android.support.v13.app.FragmentStatePagerAdapter}.
 	 */
 	SectionsPagerAdapter mSectionsPagerAdapter;
+	private BrightnessFragment brightness_fragment = BrightnessFragment.newInstance();
+	private SpeedFragment speed_fragment = SpeedFragment.newInstance();
+	private DirectionFragment direction_fragment = DirectionFragment.newInstance();
 
 	/**
 	 * The {@link ViewPager} that will host the section contents.
@@ -127,7 +131,16 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			// getItem is called to instantiate the fragment for the given page.
 			// Return a PlaceholderFragment (defined as a static inner class
 			// below).
-			return PlaceholderFragment.newInstance(position + 1);
+			switch (position) {
+			case 0:
+				return brightness_fragment;
+			case 1:
+				return speed_fragment;
+			case 2:
+				return direction_fragment;
+			default:
+				return null;
+			}
 		}
 
 		@Override
@@ -141,51 +154,79 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			Locale l = Locale.getDefault();
 			switch (position) {
 			case 0:
-				return getString(R.string.title_section1).toUpperCase(l);
+				return getString(R.string.title_brightness).toUpperCase(l);
 			case 1:
-				return getString(R.string.title_section2).toUpperCase(l);
+				return getString(R.string.title_speed).toUpperCase(l);
 			case 2:
-				return getString(R.string.title_section3).toUpperCase(l);
+				return getString(R.string.title_direction).toUpperCase(l);
 			}
 			return null;
 		}
 	}
 
 	/**
-	 * A placeholder fragment containing a simple view.
+	 * Fragment containing a brightness settings view.
 	 */
-	public static class PlaceholderFragment extends Fragment {
-		/**
-		 * The fragment argument representing the section number for this
-		 * fragment.
-		 */
-		private static final String ARG_SECTION_NUMBER = "section_number";
+	public static class BrightnessFragment extends Fragment {
 
-		/**
-		 * Returns a new instance of this fragment for the given section number.
-		 */
-		public static PlaceholderFragment newInstance(int sectionNumber) {
-			PlaceholderFragment fragment = new PlaceholderFragment();
-			Bundle args = new Bundle();
-			args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-			fragment.setArguments(args);
+		public static BrightnessFragment newInstance() {
+			BrightnessFragment fragment = new BrightnessFragment();
 			return fragment;
 		}
 
-		public PlaceholderFragment() {
+		public BrightnessFragment() {
 		}
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main, container,
+			View rootView = inflater.inflate(R.layout.fragment_brightness, container,
 					false);
-			TextView textView = (TextView) rootView
-					.findViewById(R.id.section_label);
-			textView.setText(Integer.toString(getArguments().getInt(
-					ARG_SECTION_NUMBER)));
 			return rootView;
 		}
 	}
 
+	/**
+	 * Fragment containing a speed settings view.
+	 */
+	public static class SpeedFragment extends Fragment {
+
+		public static SpeedFragment newInstance() {
+			SpeedFragment fragment = new SpeedFragment();
+			return fragment;
+		}
+
+		public SpeedFragment() {
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			View rootView = inflater.inflate(R.layout.fragment_speed, container,
+					false);
+			return rootView;
+		}
+	}
+
+	/**
+	 * Fragment containing a direction settings view.
+	 */
+	public static class DirectionFragment extends Fragment {
+
+		public static DirectionFragment newInstance() {
+			DirectionFragment fragment = new DirectionFragment();
+			return fragment;
+		}
+
+		public DirectionFragment() {
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			View rootView = inflater.inflate(R.layout.fragment_direction, container,
+					false);
+			return rootView;
+		}
+	}
 }

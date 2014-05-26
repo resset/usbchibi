@@ -2,9 +2,13 @@
 <resources>
 
     <string name="app_name">usbchibi</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
+    <string name="title_brightness">Brightness</string>
+    <string name="title_speed">Speed</string>
+    <string name="title_direction">Direction</string>
     <string name="action_settings">Settings</string>
+    <string name="brightness_counter">0</string>
+    <string name="speed_counter">0</string>
+    <string name="text_left">Left</string>
+    <string name="text_right">Right</string>
 
 </resources>
