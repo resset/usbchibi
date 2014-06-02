@@ -15,7 +15,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="42dp"
-        android:progress="0"
+        android:progress="255"
         android:max="255" />
 
     <TextView
