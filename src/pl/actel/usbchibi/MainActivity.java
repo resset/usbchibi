@@ -19,8 +19,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.RadioGroup;
 import android.widget.RadioButton;
+import android.content.Context;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
+
+	private UsbHost usbHost;
 
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -43,6 +46,9 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		// Set up UsbHost communication object
+		usbHost = new UsbHost(this, 0x0483, 0x5740);
 
 		// Set up the action bar.
 		final ActionBar actionBar = getActionBar();
@@ -77,6 +83,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					.setText(mSectionsPagerAdapter.getPageTitle(i))
 					.setTabListener(this));
 		}
+
+		brightness_fragment.setPerentActivity(this);
+		speed_fragment.setPerentActivity(this);
+		direction_fragment.setPerentActivity(this);
 	}
 
 	@Override
@@ -115,6 +125,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	@Override
 	public void onTabReselected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
+	}
+
+	public UsbHost getUsbHost() {
+		return usbHost;
 	}
 
 	/**
@@ -169,9 +183,17 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	 */
 	public static class BrightnessFragment extends Fragment {
 
+		private Activity parentActivity;
 		private TextView brightness_text;
 		private SeekBar brightness_bar;
 		Integer brightnessProgress = 0;
+
+		public void setPerentActivity(Activity parentActivity) {
+			this.parentActivity = parentActivity;
+
+			Context mainContext = this.parentActivity.getApplicationContext();
+			brightnessProgress = Integer.parseInt(mainContext.getString(R.string.brightness_counter));
+		}
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -179,23 +201,25 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			View rootView = inflater.inflate(R.layout.fragment_brightness, container,
 					false);
 
-			brightness_text = (TextView) rootView.findViewById(R.id.textViewBrightnessCounter);
-
 			brightness_bar = (SeekBar) rootView.findViewById(R.id.seekBarBrightness);
 			brightness_bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
-	            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-	                brightnessProgress = progress;
-	            }
+				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+					brightnessProgress = progress;
+				}
 
-	            public void onStartTrackingTouch(SeekBar seekBar) {
-					// TODO Auto-generated method stub
-	            }
+				public void onStartTrackingTouch(SeekBar seekBar) {
+				}
 
-	            public void onStopTrackingTouch(SeekBar seekBar) {
-	                brightness_text.setText(brightnessProgress.toString());
-	            }
-	        });
+				public void onStopTrackingTouch(SeekBar seekBar) {
+					brightness_text.setText(brightnessProgress.toString());
+					byte[] data = { 'b', (byte) (brightnessProgress & 0xff) };
+					((MainActivity) parentActivity).getUsbHost().send(data);
+				}
+			});
+
+			brightness_text = (TextView) rootView.findViewById(R.id.textViewBrightnessCounter);
+			brightness_text.setText(brightnessProgress.toString());
 
 			return rootView;
 		}
@@ -206,9 +230,17 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	 */
 	public static class SpeedFragment extends Fragment {
 
+		private Activity parentActivity;
 		private TextView speed_text;
 		private SeekBar speed_bar;
 		Integer speedProgress = 0;
+
+		public void setPerentActivity(Activity parentActivity) {
+			this.parentActivity = parentActivity;
+
+			Context mainContext = this.parentActivity.getApplicationContext();
+			speedProgress = Integer.parseInt(mainContext.getString(R.string.speed_counter));
+		}
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -216,23 +248,25 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			View rootView = inflater.inflate(R.layout.fragment_speed, container,
 					false);
 
-			speed_text = (TextView) rootView.findViewById(R.id.textViewSpeedCounter);
-
 			speed_bar = (SeekBar) rootView.findViewById(R.id.seekBarSpeed);
 			speed_bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
-	            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-	                speedProgress = progress;
-	            }
+				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+					speedProgress = progress;
+				}
 
-	            public void onStartTrackingTouch(SeekBar seekBar) {
-					// TODO Auto-generated method stub
-	            }
+				public void onStartTrackingTouch(SeekBar seekBar) {
+				}
 
-	            public void onStopTrackingTouch(SeekBar seekBar) {
-	                speed_text.setText(speedProgress.toString());
-	            }
-	        });
+				public void onStopTrackingTouch(SeekBar seekBar) {
+					speed_text.setText(speedProgress.toString());
+					byte[] data = { 's', (byte) (speedProgress & 0xff) };
+					((MainActivity) parentActivity).getUsbHost().send(data);
+				}
+			});
+
+			speed_text = (TextView) rootView.findViewById(R.id.textViewSpeedCounter);
+			speed_text.setText(speedProgress.toString());
 
 			return rootView;
 		}
@@ -243,9 +277,14 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	 */
 	public static class DirectionFragment extends Fragment {
 
+		private Activity parentActivity;
 		private RadioGroup direction_group;
 		private RadioButton direction_left;
 		private RadioButton direction_right;
+
+		public void setPerentActivity(Activity parentActivity) {
+			this.parentActivity = parentActivity;
+		}
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -262,9 +301,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				@Override
 				public void onCheckedChanged(RadioGroup group, int checkedId) {
 					if (checkedId == direction_left.getId()) {
-						System.out.println("lewo");
-					} else {
-						System.out.println("prawo");
+						byte[] data = { 'd', (byte) 0x0 };
+						((MainActivity) parentActivity).getUsbHost().send(data);
+					} else if (checkedId == direction_right.getId()) {
+						byte[] data = { 'd', (byte) 0xff };
+						((MainActivity) parentActivity).getUsbHost().send(data);
 					}
 				}
 			});
