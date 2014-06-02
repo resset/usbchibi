@@ -301,10 +301,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				@Override
 				public void onCheckedChanged(RadioGroup group, int checkedId) {
 					if (checkedId == direction_left.getId()) {
-						byte[] data = { 'd', (byte) 0x0 };
+						byte[] data = { 'd', 'L' };
 						((MainActivity) parentActivity).getUsbHost().send(data);
 					} else if (checkedId == direction_right.getId()) {
-						byte[] data = { 'd', (byte) 0xff };
+						byte[] data = { 'd', 'R' };
 						((MainActivity) parentActivity).getUsbHost().send(data);
 					}
 				}
